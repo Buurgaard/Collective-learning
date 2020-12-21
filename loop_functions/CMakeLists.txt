@@ -9,6 +9,12 @@ add_subdirectory(mpga_loop_functions)
 # Descend into the custom_distributions_loop_functions directory
 add_subdirectory(custom_distributions_loop_functions)
 
+# Descend into the area_cleaning_loop_functions directory
+add_subdirectory(area_cleaning_loop_functions)
+
+# Descend into the feature_selection_loop_functions directory
+add_subdirectory(feature_selection_loop_functions)
+
 # If Qt+OpenGL dependencies were found, descend into these directories
 if(ARGOS_COMPILE_QTOPENGL)
   add_subdirectory(trajectory_loop_functions)

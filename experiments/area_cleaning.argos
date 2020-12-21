@@ -1,0 +1,191 @@
+<?xml version="1.0" ?>
+<argos-configuration>
+
+    <framework>
+
+        <system threads="0" />
+        <experiment length="0"
+                    ticks_per_second="10"
+                    random_seed="0"/>
+
+    </framework>
+
+    <controllers>
+
+        <footbot_areacleaning_controller id="facc"
+                                      library="build/controllers/footbot_areacleaning/libfootbot_areacleaning">
+            <actuators>
+                <differential_steering implementation="default" />
+                <footbot_gripper       implementation="default" />
+                <leds                  implementation="default" medium="leds" />
+                <range_and_bearing     implementation="default" medium="rab" />
+            </actuators>
+
+            <sensors>
+                <footbot_proximity implementation="default" show_rays="true" />
+                <footbot_motor_ground implementation="rot_z_only" />
+
+                <colored_blob_omnidirectional_camera implementation="rot_z_only"
+                                                     medium="leds"
+                                                     />
+                <range_and_bearing     implementation="medium"  medium="rab" show_rays="true"  />
+                <differential_steering  implementation="default" />
+
+
+
+            </sensors>
+
+            <params alpha="7.5" delta="0.12" velocity="10" epsilon="0"/>
+ar
+        </footbot_areacleaning_controller>
+
+    </controllers>
+
+
+    <loop_functions library="build/loop_functions/area_cleaning_loop_functions/libarea_cleaning_loop_functions"
+                    label="area_cleaning_loop_functions">
+
+    </loop_functions>
+
+    <arena size="15, 15, 30" center="0,0,1">
+
+        <floor id="floor"
+               source="loop_functions"
+               pixels_per_meter="50" />
+
+<!--        &lt;!&ndash; Place four boxes in a square to delimit the arena &ndash;&gt;-->
+<!--        <box id="wall_north" size="4,0.1,0.2" movable="false">-->
+<!--            <body position="0,2,0" orientation="0,0,0" />-->
+<!--        </box>-->
+<!--        <box id="wall_south" size="4,0.1,0.2" movable="false">-->
+<!--            <body position="0,-2,0" orientation="0,0,0" />-->
+<!--        </box>-->
+<!--        <box id="wall_east" size="0.1,4,0.2" movable="false">-->
+<!--            <body position="2,0,0" orientation="0,0,0" />-->
+<!--        </box>-->
+<!--        <box id="wall_west" size="0.1,4,0.2" movable="false">-->
+<!--            <body position="-2,0,0" orientation="0,0,0" />-->
+<!--        </box>-->
+
+        <!-- Place four boxes in a square to delimit the arena 15x15 -->
+        <box id="wall_north" size="15,0.1,0.2" movable="false">
+            <body position="0,7.5,0" orientation="0,0,0" />
+        </box>
+        <box id="wall_south" size="15,0.1,0.2" movable="false">
+            <body position="0,-7.5,0" orientation="0,0,0" />
+        </box>
+        <box id="wall_east" size="0.1,15,0.2" movable="false">
+            <body position="7.5,0,0" orientation="0,0,0" />
+        </box>
+        <box id="wall_west" size="0.1,15,0.2" movable="false">
+            <body position="-7.5,0,0" orientation="0,0,0" />
+        </box>
+
+
+
+        <distribute>
+            <position method="uniform" min="-7.3,-7.3,0" max="7.3,7.3,0" />
+            <orientation method="uniform" min="0,0,0" max="360,0,0" />
+            <entity quantity="144" max_trials="100">
+                <cylinder id="g" height="0.2" radius="0.1"  mass="2" movable="true">
+                    <leds medium="leds">
+<!--                        <led offset=" 0, 0.1 , 0.1"     anchor="origin" color="green" />-->
+<!--                        <led offset=" 0, -0.1 , 0.1"    anchor="origin" color="green" />-->
+                        <led offset=" 0, 0 , 0.2"       anchor="origin" color="green" />
+                    </leds>
+                </cylinder>
+            </entity>
+        </distribute>
+
+        <distribute>
+            <position method="uniform" min="-7.3,-7.3,0" max="7.3,7.3,0" />
+            <orientation method="uniform" min="0,0,0" max="360,0,0" />
+            <entity quantity="144" max_trials="10000">
+                <cylinder id="b" height="0.2" radius="0.1"  mass="2" movable="true">
+                    <leds medium="leds">
+<!--                        <led offset=" 0, 0.1 , 0.1"     anchor="origin" color="blue" />-->
+<!--                        <led offset=" 0, -0.1 , 0.1"    anchor="origin" color="blue" />-->
+                        <led offset=" 0, 0 , 0.2"    anchor="origin" color="blue" />
+                    </leds>
+                </cylinder>
+            </entity>
+        </distribute>
+
+        <distribute>
+            <position method="uniform" min="-7.3,-7.3,0" max="7.3,7.3,0" />
+            <orientation method="uniform" min="0,0,0" max="360,0,0" />
+            <entity quantity="144" max_trials="1000">
+                <cylinder id="r" height="0.2" radius="0.1" mass="2" movable="true">
+                    <leds medium="leds">
+<!--                        <led offset=" 0, 0.1 , 0.1"     anchor="origin" color="red" />-->
+<!--                        <led offset=" 0, -0.1 , 0.1"    anchor="origin" color="red" />-->
+                        <led offset=" 0, 0 , 0.2"    anchor="origin" color="red" />
+                    </leds>
+                </cylinder>
+            </entity>
+        </distribute>
+
+
+        <distribute>
+            <position method="uniform" min="-7.3,-7.3,0" max="7.3,7.3,0" />
+            <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
+            <entity quantity="100" max_trials="100">
+                <foot-bot id="fb" rab_data_size="11">
+                    <controller config="facc" />
+                </foot-bot>
+            </entity>
+        </distribute>
+
+<!--        <foot-bot id="fb0" rab_data_size="11">-->
+<!--            <body position="0,0,0" orientation="0,0,0" />-->
+<!--            <controller config="facc"/>-->
+<!--        </foot-bot>-->
+<!--        <foot-bot id="fb1" rab_data_size="11">-->
+<!--            <body position="0,-1,0" orientation="0,0,0" />-->
+<!--            <controller config="facc"/>-->
+<!--        </foot-bot>-->
+<!--        <foot-bot id="fb2">-->
+<!--            <body position="0,1,0" orientation="0,0,0" />-->
+<!--            <controller config="facc"/>-->
+<!--        </foot-bot>-->
+<!--        <foot-bot id="fb_3">-->
+<!--            <body position="-4.5,1.2,0" orientation="0,0,0" />-->
+<!--            <controller config="facc"/>-->
+<!--        </foot-bot>-->
+<!--        <foot-bot id="fb_4">-->
+<!--            <body position="-4.5,-1.2,0" orientation="0,0,0" />-->
+<!--            <controller config="facc"/>-->
+<!--        </foot-bot>-->
+
+    </arena>
+
+    <physics_engines>
+
+        <dynamics2d id="dyn2d">
+<!--            <friction box_linear_friction="10.0"-->
+<!--                      box_angular_friction="10.0"-->
+<!--                      cylinder_linear_friction="3.0"-->
+<!--                      cylinder_angular_friction="4.0" />-->
+        </dynamics2d>
+
+
+    </physics_engines>
+
+    <media>
+        <led id="id_of_led_medium" />
+        <led id="leds"/>
+       <range_and_bearing id="rab" />
+    </media>
+
+    <visualization>
+        <qt-opengl>
+            <camera>
+                <placement idx="0"
+                           position="14.4568,0,4"
+                           look_at="0,0,0" up="0,0,1"
+                           lens_focal_length="150" />
+            </camera>
+        </qt-opengl>
+    </visualization>
+
+</argos-configuration>

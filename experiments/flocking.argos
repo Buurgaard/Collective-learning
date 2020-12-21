@@ -42,7 +42,7 @@
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-  <arena size="30,30,1" center="0,0,0.5">
+  <arena size="30,30,5" center="0,0,0.5">
 
     <light id="light"
            position="8.9,2.7,0.5"
